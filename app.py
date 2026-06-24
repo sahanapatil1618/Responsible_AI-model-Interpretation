@@ -4,6 +4,7 @@ import numpy as np
 
 app = Flask(__name__)
 
+
 model = joblib.load("loan_model.pkl")
 
 @app.route('/')
@@ -32,7 +33,15 @@ def predict():
 
     prediction = model.predict(features)[0]
 
-    return jsonify({'Loan_Status': int(prediction)})
+    if prediction == 1:
+        result = "Loan Approved"
+    else:
+        result = "Loan Rejected"
+
+    return jsonify({
+        "status": "success",
+        "prediction": result
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
